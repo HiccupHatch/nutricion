@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 
 namespace ServicioRest5.Areas.Api.Models
 {
-    public class UsuariosManager
+    public class UsuarioManager
     {
         private static string cadenaConexion =
             @"Server=LAPTOP-V8VFEUF2;Initial Catalog=BDNutricion;Integrated Security=True";

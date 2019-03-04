@@ -111,14 +111,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
+    <Compile Include="Areas\Api\Controllers\AlimentosController.cs" />
     <Compile Include="Areas\Api\Controllers\ClientesController.cs" />
     <Compile Include="Areas\Api\Controllers\UsuariosController.cs" />
+    <Compile Include="Areas\Api\Models\Alimento.cs" />
+    <Compile Include="Areas\Api\Models\AlimentoManager.cs" />
     <Compile Include="Areas\Api\Models\Calorias.cs" />
     <Compile Include="Areas\Api\Models\CaloriasManager.cs" />
     <Compile Include="Areas\Api\Models\Cliente.cs" />
     <Compile Include="Areas\Api\Models\ClienteManager.cs" />
     <Compile Include="Areas\Api\Models\Usuario.cs" />
-    <Compile Include="Areas\Api\Models\UsuariosManager.cs" />
+    <Compile Include="Areas\Api\Models\UsuarioManager.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

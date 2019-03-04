@@ -14,6 +14,7 @@ namespace ServicioRest5.Areas.Api
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
+            //Usuario
             context.MapRoute(
                 "AccesoUsuario",
                 "Api/Usuarios/Usuario/{email}/{password}",
@@ -33,6 +34,28 @@ namespace ServicioRest5.Areas.Api
                 {
                     controller = "Usuarios",
                     action = "Usuarios"
+                }
+            );
+
+            //Alimento
+            context.MapRoute(
+                "AccesoAlimento",
+                "Api/Alimentos/Alimento/{codigo}",
+                new
+                {
+                    controller = "Alimentos",
+                    action = "Alimento",
+                    codigo = UrlParameter.Optional
+                }
+            );
+
+            context.MapRoute(
+                "AccesoAlimentos",
+                "Api/Alimentos",
+                new
+                {
+                    controller = "Alimentos",
+                    action = "Alimentos"
                 }
             );
 
