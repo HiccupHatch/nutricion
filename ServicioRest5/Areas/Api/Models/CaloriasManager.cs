@@ -35,21 +35,28 @@ namespace ServicioRest5.Areas.Api.Models
             return (res == 1);
         }
 
-        public bool ActualizarCalorias(Calorias cal)
+        public bool ActualizarCalorias(Calorias calAnt, Calorias calNuev)
         {
             SqlConnection con = new SqlConnection(cadenaConexion);
 
             con.Open();
 
-            string sql = "UPDATE " + tabla + " SET email = @email, fecha = @fecha, tipoComida = @tipoComida, codigoAlimento = @codigoAlimento WHERE IdCliente = @idcliente";
-
+            string sql = "UPDATE " + tabla + " SET fecha = @fechaNuev, tipoComida = @tipoComidaNuev, codigoAlimento = @codigoAlimentoNuev, cantidad = @cantidadNuev";
+            string where = "WHERE email = @email and fecha = @fechaAnt and tipoComida = @tipoComidaAnt and codigoAlimento = @codigoAlimentoAnt and cantidadAnt = @cantidadAnt";
+            sql = sql +" "+ where;
             SqlCommand cmd = new SqlCommand(sql, con);
 
-            cmd.Parameters.Add("@email", System.Data.SqlDbType.NVarChar).Value = cal.email;
-            cmd.Parameters.Add("@fecha", System.Data.SqlDbType.NVarChar).Value = cal.fecha;
-            cmd.Parameters.Add("@tipoComida", System.Data.SqlDbType.Char).Value = cal.tipoComida;
-            cmd.Parameters.Add("@codigoAlimento", System.Data.SqlDbType.Int).Value = cal.codigoAlimento;
-            cmd.Parameters.Add("@cantidad", System.Data.SqlDbType.Int).Value = cal.cantidad;
+            cmd.Parameters.Add("@fechaNuev", System.Data.SqlDbType.NVarChar).Value = calNuev.fecha;
+            cmd.Parameters.Add("@tipoComidaNuev", System.Data.SqlDbType.Char).Value = calNuev.tipoComida;
+            cmd.Parameters.Add("@codigoAlimentoNuev", System.Data.SqlDbType.Int).Value = calNuev.codigoAlimento;
+            cmd.Parameters.Add("@cantidadNuev", System.Data.SqlDbType.Int).Value = calNuev.cantidad;
+
+            //
+            cmd.Parameters.Add("@email", System.Data.SqlDbType.NVarChar).Value = calAnt.email;
+            cmd.Parameters.Add("@fechaAnt", System.Data.SqlDbType.NVarChar).Value = calAnt.fecha;
+            cmd.Parameters.Add("@tipoComidaAnt", System.Data.SqlDbType.Char).Value = calAnt.tipoComida;
+            cmd.Parameters.Add("@codigoAlimentoAnt", System.Data.SqlDbType.Int).Value = calAnt.codigoAlimento;
+            cmd.Parameters.Add("@cantidadAnt", System.Data.SqlDbType.Int).Value = calAnt.cantidad;
 
             int res = cmd.ExecuteNonQuery();
 
@@ -58,45 +65,51 @@ namespace ServicioRest5.Areas.Api.Models
             return (res == 1);
         }
 
-        public Cliente ObtenerCliente(int id)
+        public Calorias ObtenerCaloriasUno(string email, string fecha, char tipoComida, int codigoAlimento)
         {
-            Cliente cli = null;
+            Calorias cal = null;
 
             SqlConnection con = new SqlConnection(cadenaConexion);
 
             con.Open();
 
-            string sql = "SELECT Nombre, Telefono FROM"+ tabla +"WHERE IdCliente = @idcliente";
+            string sql = "SELECT cantidad FROM"+ tabla + "WHERE email = @email and fecha = @fecha and tipoComida = @tipoComida and codigoAlimento = @codigoAlimento";
 
             SqlCommand cmd = new SqlCommand(sql, con);
 
-            cmd.Parameters.Add("@idcliente", System.Data.SqlDbType.Int).Value = id;
+            cmd.Parameters.Add("@email", System.Data.SqlDbType.NVarChar).Value = email;
+            cmd.Parameters.Add("@fecha", System.Data.SqlDbType.NVarChar).Value = fecha;
+            cmd.Parameters.Add("@tipoComida", System.Data.SqlDbType.Char).Value = tipoComida;
+            cmd.Parameters.Add("@codigoAlimento", System.Data.SqlDbType.Int).Value = codigoAlimento;
+            
             SqlDataReader reader =
                  cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
 
 
             if (reader.Read())
             {
-                cli = new Cliente();
-                cli.Id = id;
-                cli.Nombre = reader.GetString(0);
-                cli.Telefono = reader.GetInt32(1);
+                cal = new Calorias();
+                cal.email = email;
+                cal.fecha = fecha;
+                cal.tipoComida = tipoComida;
+                cal.codigoAlimento = codigoAlimento;
+                cal.cantidad = reader.GetInt32(0);
             }
 
             reader.Close();
 
-            return cli;
+            return cal;
         }
 
-        public List<Cliente> ObtenerClientes()
+        public List<Calorias> ObtenerCaloriases()
         {
-            List<Cliente> lista = new List<Cliente>();
+            List<Calorias> lista = new List<Calorias>();
 
             SqlConnection con = new SqlConnection(cadenaConexion);
 
             con.Open();
 
-            string sql = "SELECT IdCliente, Nombre, Telefono FROM " + tabla + "";
+            string sql = "SELECT * FROM " + tabla + "";
 
             SqlCommand cmd = new SqlCommand(sql, con);
 
@@ -105,14 +118,16 @@ namespace ServicioRest5.Areas.Api.Models
 
             while (reader.Read())
             {
-                Cliente cli = new Cliente();
+                Calorias cal = new Calorias();
 
-                cli = new Cliente();
-                cli.Id = reader.GetInt32(0);
-                cli.Nombre = reader.GetString(1);
-                cli.Telefono = reader.GetInt32(2);
+                cal = new Calorias();
+                cal.email = reader.GetString(0);
+                cal.fecha = reader.GetString(1);
+                cal.tipoComida = reader.GetChar(2);
+                cal.codigoAlimento = reader.GetInt32(3);
+                cal.cantidad = reader.GetInt32(4);
 
-                lista.Add(cli);
+                lista.Add(cal);
             }
 
             reader.Close();
@@ -120,17 +135,20 @@ namespace ServicioRest5.Areas.Api.Models
             return lista;
         }
 
-        public bool EliminarCliente(int id)
+        public bool EliminarCalorias(string email, string fecha, char tipoComida, int codigoAlimento)
         {
             SqlConnection con = new SqlConnection(cadenaConexion);
 
             con.Open();
 
-            string sql = "DELETE FROM " + tabla + " WHERE IdCliente = @idcliente";
+            string sql = "DELETE FROM " + tabla + " WHERE email = @email and fecha = @fecha and tipoComida = @tipoComida and codigoAlimento = @codigoAlimento";
 
             SqlCommand cmd = new SqlCommand(sql, con);
 
-            cmd.Parameters.Add("@idcliente", System.Data.SqlDbType.Int).Value = id;
+            cmd.Parameters.Add("@email", System.Data.SqlDbType.NVarChar).Value = email;
+            cmd.Parameters.Add("@fecha", System.Data.SqlDbType.NVarChar).Value = fecha;
+            cmd.Parameters.Add("@tipoComida", System.Data.SqlDbType.Char).Value = tipoComida;
+            cmd.Parameters.Add("@codigoAlimento", System.Data.SqlDbType.Int).Value = codigoAlimento;
 
             int res = cmd.ExecuteNonQuery();
 
