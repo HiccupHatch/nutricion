@@ -18,7 +18,7 @@ namespace ServicioRest5.Areas.Api.Models
 
             con.Open();
 
-            string sql = "INSERT INTO " + tabla + " (email, fecha, tipoComida, codigoAlimento, cantidad) VALUES (@email, @telfechaefono, @tipoComida, @codigoAlimento, @cantidad)";
+            string sql = "INSERT INTO " + tabla + " (email, fecha, tipoComida, codigoAlimento, cantidad) VALUES (@email, @fecha, @tipoComida, @codigoAlimento, @cantidad)";
 
             SqlCommand cmd = new SqlCommand(sql, con);
 
@@ -101,7 +101,7 @@ namespace ServicioRest5.Areas.Api.Models
             return cal;
         }
 
-        public List<Calorias> ObtenerCaloriases()
+        public List<Calorias> ObtenerCalorias()
         {
             List<Calorias> lista = new List<Calorias>();
 
@@ -123,7 +123,7 @@ namespace ServicioRest5.Areas.Api.Models
                 cal = new Calorias();
                 cal.email = reader.GetString(0);
                 cal.fecha = reader.GetString(1);
-                cal.tipoComida = reader.GetChar(2);
+                cal.tipoComida = reader.GetString(2)[0];
                 cal.codigoAlimento = reader.GetInt32(3);
                 cal.cantidad = reader.GetInt32(4);
 

@@ -59,6 +59,29 @@ namespace ServicioRest5.Areas.Api
                 }
             );
 
+
+            //Calorias
+            context.MapRoute(
+               "AccesoCaloria",
+               "Api/Calorias/Caloria/{id}",
+               new
+               {
+                   controller = "Calorias",
+                   action = "Caloria",
+                   email = UrlParameter.Optional
+               }
+           );
+            context.MapRoute(
+                "AccesoCalorias",
+                "Api/Calorias/",
+                new
+                {
+                    controller = "Calorias",
+                    action = "Calorias"
+                }
+            );
+
+
             context.MapRoute(
                 "Api_default",
                 "Api/{controller}/{action}/{id}",

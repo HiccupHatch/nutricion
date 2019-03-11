@@ -73,7 +73,7 @@ namespace ServicioRest5.Areas.Api.Models
                 usu = new Usuario();
                 usu.email = email;
                 usu.password = reader.GetString(1);
-                //usu.foto = reader.GetString(2);
+                usu.foto = reader.GetString(2);
             }
 
             reader.Close();
